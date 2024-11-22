@@ -1,8 +1,12 @@
+import About from "./components/About";
+import Hero from "./components/Hero";
+
 const App = () => {
   return (
-    <div className="text-orange-500 text-7xl font-black text-center">
-      Hello In the World of Gaming!
-    </div>
+    <main className="relative min-h-screen w-screen overflow-x-hidden">
+      <Hero />
+      <About />
+    </main>
   );
 };
 
