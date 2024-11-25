@@ -1,9 +1,18 @@
+/* eslint-disable react/prop-types */
 import clsx from "clsx";
 
-// eslint-disable-next-line react/prop-types
-const Button = ({ id, title, rightIcon, leftIcon, containerClass }) => {
+const Button = ({
+  id,
+  title,
+  rightIcon,
+  leftIcon,
+  containerClass,
+
+  fn,
+}) => {
   return (
     <button
+      onMouseEnter={fn}
       id={id}
       className={clsx(
         "group relative z-10 w-fit cursor-pointer overflow-hidden rounded-full bg-violet-50 px-7 py-3 text-black",

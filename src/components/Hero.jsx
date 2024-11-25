@@ -4,15 +4,20 @@ import { TiLocationArrow } from "react-icons/ti";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
 import gsap from "gsap";
+import useSoundStore from "../store/store";
+import VideoPreview from "../components/VideoPreview"
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [hasClicked, setHasClicked] = useState(false);
+  const { isAudioPlaying } = useSoundStore();
 
   const [loading, setLoading] = useState(true);
   const [loadedVideos, setLoadedVideos] = useState(0);
+  console.log(loadedVideos);
+  const hoverSoundRef = useRef(null);
 
   const totalVideos = 4;
   const nextVdRef = useRef(null);
@@ -25,7 +30,6 @@ const Hero = () => {
 
   const handleMiniVdClick = () => {
     setHasClicked(true);
-
     setCurrentIndex((prevIndex) => (prevIndex % totalVideos) + 1);
   };
 
@@ -34,6 +38,13 @@ const Hero = () => {
   const handleVideoLoad = () => {
     setLoadedVideos((prev) => prev + 1);
   };
+  const handleLinkHover = () => {
+    if (isAudioPlaying) {
+      hoverSoundRef.current.currentTime = 0; // Restart sound
+      hoverSoundRef.current.play();
+    }
+  };
+
   useGSAP(
     () => {
       if (hasClicked) {
@@ -98,7 +109,7 @@ const Hero = () => {
       >
         <div>
           <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg">
-            {/* <VideoPreview> */}
+            <VideoPreview>
             <div
               onClick={handleMiniVdClick}
               className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100"
@@ -113,7 +124,7 @@ const Hero = () => {
                 onLoadedData={handleVideoLoad}
               />
             </div>
-            {/* </VideoPreview> */}
+            </VideoPreview>
           </div>
 
           <video
@@ -152,10 +163,16 @@ const Hero = () => {
             </p>
 
             <Button
+              fn={handleLinkHover}
               id="watch-trailer"
               title="Watch trailer"
               leftIcon={<TiLocationArrow />}
               containerClass="bg-yellow-300 flex-center gap-1"
+            />
+            <audio
+              ref={hoverSoundRef}
+              className="hidden"
+              src="/audio/click.mp3"
             />
           </div>
         </div>
